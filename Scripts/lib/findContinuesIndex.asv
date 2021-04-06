@@ -34,13 +34,12 @@ function ti = findContinuesIndex(t,s)
 
 %% Assertions
 assert(all(diff(s)>=0),'Samples in s has to be increasing');
-%assert(all(t >=s(1)),'t must be greater or eqaul to the first value of s');
-%assert(all(t<=s(end)),'t must be smaller or eqaul to the last value of s');
+assert(all(t >=s(1)),'t must be greater or eqaul to the first value of s');
+assert(all(t<=s(end)),'t must be smaller or eqaul to the last value of s');
 
 %% Calculations
-[~,t0]=max(t <= s',[],2);
-t0 = t0 -1;
+t0 = rowfun(@find(t <= s',1)-1;
 t0(t0==0) = 1;
-ti = t0 + (t-s(t0))./(s(t0+1)-s(t0));
+ti = t0 + (t-s(t0))/(s(t0+1)-s(t0));
 
 end

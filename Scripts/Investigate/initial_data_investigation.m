@@ -40,12 +40,14 @@ for i = 1:length(SIGNALS)
     subplot(2,2,i);
     plot(SIGNALS{i}.targetsQRS);
     title(strcat('Targets QRS signals: ', string(i)));
+    xlabel('beat index');
 end
 % Analysis
 % The signals are of different length but all are of the order 1e4.
 % The signal is binary with 1 for AF period and 0 for normal.
 % The signals have a different number of AF-periods with the first signal
 %   having the fewest and the last signal having the most.
+
 
 %% Investigate field: 'targetsRR'
 signals_targetsRRS = struct;
@@ -62,6 +64,7 @@ for i = 1:length(SIGNALS)
     subplot(2,2,i);
     plot(SIGNALS{i}.targetsRR);
     title(strcat('Targets RR signals: ', string(i)));
+    xlabel('beat period');
 end
 % Analysis
 % The signals are of different length but all are of the order 1e4.
@@ -86,6 +89,8 @@ for i = 1:length(SIGNALS)
     subplot(2,2,i);
     plot(SIGNALS{i}.qrs);
     title(strcat('qrs signals: ', string(i)));
+    xlabel('beat index');
+    ylabel('sample index');
 end
 % Analysis
 % Signal is a column vector.
@@ -109,6 +114,8 @@ for i = 1:length(SIGNALS)
     subplot(2,2,i);
     plot(SIGNALS{i}.rr);
     title(strcat('rr signals: ', string(i)));
+    xlabel('Beat period');
+    ylabel('Period duration');
 end
 % Analysis
 % Signal is a column vector.
