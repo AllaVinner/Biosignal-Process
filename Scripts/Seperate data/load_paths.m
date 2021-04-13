@@ -1,0 +1,4 @@
+%% Load path 
+
+addpath('../lib');
+
