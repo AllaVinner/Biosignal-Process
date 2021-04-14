@@ -8,9 +8,6 @@
 %              Std
 %              skewness
 %
-%   CORRELATIONS
-%
-%
 
 clear
 %% add paths
@@ -23,30 +20,37 @@ load('..\..\Data\Seperated_Data\Training\Seperated_data.mat');
 num_class = length(CLASS);
 
 %% Define features
-num_feat = 3;
+num_feat = 4;
 m = cell(num_class,1);
 s = cell(num_class,1);
 sk = cell(num_class,1);
+
+corr2 = cell(num_class,1);
 
 for ci = 1:num_class
     le = length(CLASS{ci}.data);
     m_temp = zeros(le,1);
     s_temp = zeros(le,1);
     sk_temp = zeros(le,1);
+    corr2_temp = zeros(le,1);
     
     for ei = 1:le
         m_temp(ei) = mean( CLASS{ci}.data{ei} );
         s_temp(ei) = std( CLASS{ci}.data{ei} );
         sk_temp(ei) = skewness( CLASS{ci}.data{ei} );
         
+        acorr = autocorr(CLASS{ci}.data{ei});
+        corr2_temp(ei) = acorr(2);
+        
     end
     
     m{ci} = m_temp;
     s{ci} = s_temp;
     sk{ci} = sk_temp;
+    corr2{ci} = corr2_temp;
 end
 
-%%  Histogram over features (different plots)
+%% Histogram over all epochs regarding calculated features for each epoch
 
 for ci = 1:num_class
    figure
@@ -69,9 +73,13 @@ for ci = 1:num_class
    title('Histogram over skewness');
    xlabel('RR time duration');
    
+   subplot(num_feat,1,4);
+   histogram(corr2{ci},[-1:0.025:1]);
+   title('Histogram over correlation lag 1');
+   
 end
 
-%% Histogram over features (same plot)
+%% Histogram as before but in same plot
 figure
 
 subplot(num_feat,1,1);
@@ -99,32 +107,10 @@ histogram(sk{1},[-10:0.5:10]);
 histogram(sk{2},[-10:0.5:10]);
 legend('Normal', 'AF');
 
-
-%% Correlations
-%% Define correlations
-num_corr = 5;
-c = cell(num_class,1);
-
-for ci = 1:num_class
-    c_temp = zeros(le,num_corr);
-    for ei = 1:le
-        acorr = [autocorr(CLASS{ci}.data{ei}) zeros(1,num_corr)];
-        c_temp(ei,:) = acorr(2:num_corr+1);
-        
-    end
-    c{ci} = c_temp;
-end
-
-%% Plot correlations
-figure
-for i = 1:num_corr
-    subplot(num_corr,1,i);
-    hold on
-    title('Histogram over auto correlation (WARNING bad graph) ');
-    xlabel('Correlation ');
-    histogram(c{1}(:,i),[-1:0.025:1]);
-    histogram(c{2}(:,i),[-1:0.025:1]);
-    legend('Normal', 'AF');
-end
-% Unreliable since nomrmal is sooo much longer henc slow degrading
-% correlation. This is better for a window analysis
+subplot(num_feat,1,4);
+hold on
+title('Histogram over auto correlation ');
+xlabel('RR time duration');
+histogram(corr2{1},[-1:0.025:1]);
+histogram(corr2{2},[-1:0.025:1]);
+legend('Normal', 'AF');

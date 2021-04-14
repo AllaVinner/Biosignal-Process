@@ -1,5 +1,6 @@
 %% Init investigation
 clear
+
 %% add paths
 load_paths;
 

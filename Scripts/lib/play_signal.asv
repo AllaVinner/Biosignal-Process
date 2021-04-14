@@ -1,0 +1,24 @@
+function play_signal(signal, target, speed,window_length, colors)
+
+[len_signals, num_signals] = size(signal);
+
+figure
+current_class = target(1);
+dy = max(signal)-min(signal);
+ymin = min(signal) - dy/100;
+ymax = max(signal) + dy/100;
+
+change = abs(conv(target,[1, -1]))>0;
+
+for i = 1:len_signals-window_length+1
+    change_window = change(i:i+window_length-1);
+    
+    for si = 1:num_signals
+        subplot(num_signals,1,si);
+        plot(signal(i:i+window_length-1,si));
+        rectangle('Position',[
+    end
+    current_class = target(i+window_length/2);
+    pause(speed) 
+end
+
